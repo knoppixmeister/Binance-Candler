@@ -8,7 +8,6 @@ import org.jfree.data.time.*;
 import org.jfree.data.time.ohlc.*;
 import org.joda.time.*;
 import com.squareup.moshi.*;
-
 import bn.Config;
 import bn.rest.*;
 import bn.utils.*;
