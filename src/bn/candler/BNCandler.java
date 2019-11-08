@@ -1,7 +1,6 @@
 package bn.candler;
 
 import java.math.*;
-import java.util.List;
 import java.util.*;
 import java.util.concurrent.*;
 import org.jfree.data.time.*;
@@ -397,7 +396,9 @@ public class BNCandler {
 				if(OHLC_SERIES != null && OHLC_SERIES.containsKey(te.data.s.toUpperCase())) {
 					boolean isCandleUpdate = true;
 
-					for(Integer intervalKey : OHLC_SERIES.get(te.data.s.toUpperCase()).keySet()) {
+					// iterate from high TFs to low
+					// higher TF get data/updates first
+					for(Integer intervalKey : new TreeSet<>(OHLC_SERIES.get(te.data.s.toUpperCase()).keySet()).descendingSet()) {
 						if(OHLC_SERIES.get(te.data.s.toUpperCase()).get(intervalKey).getItemCount() < 1) continue;
 
 						lastCandle		=	(OHLCItem) OHLC_SERIES.get(te.data.s.toUpperCase()).get(intervalKey).getDataItem(OHLC_SERIES.get(te.data.s.toUpperCase()).get(intervalKey).getItemCount()-1);
