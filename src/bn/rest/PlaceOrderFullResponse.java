@@ -7,8 +7,8 @@ import java.util.List;
 	"symbol":				"BTCUSDT",
 	"orderId":				28,
 	"orderListId":			-1,							//Unless OCO, value will be -1
-	"clientOrderId":		"6gCrw2k",
-	"transactTime":			150,
+	"clientOrderId":		"6gC....",
+	"transactTime":			150....,
 	"price":				"1.00000000",
 	"origQty":				"10.00000000",
 	"executedQty":			"10.00000000",
