@@ -17,6 +17,6 @@ public class Fill {
 	public String quantity;
 
 	public String toString() {
-		return new  Moshi.Builder().build().adapter(Fill.class).toJson(this);
+		return new Moshi.Builder().build().adapter(Fill.class).toJson(this);
 	}
 }
