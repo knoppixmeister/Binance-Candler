@@ -9,9 +9,9 @@ import org.joda.time.*;
 import com.squareup.moshi.*;
 import bn.Config;
 import bn.rest.*;
-import bn.utils.*;
 import okhttp3.*;
 import okhttp3.internal.ws.RealWebSocket;
+import bn.utils.*;
 
 public class BNCandler {
 	public static final String BASE_WS_URL = "wss://stream.binance.com:9443";
@@ -57,7 +57,7 @@ public class BNCandler {
 	}
 
 	public boolean add(String pair, final int interval) {
-		pair = pair.replaceAll("-", "");
+		pair = pair.replaceAll("-", "").replaceAll("_", "");
 
 		if(!OHLC_SERIES.containsKey(pair.toUpperCase())) {
 			OHLC_SERIES.put(pair.toUpperCase(), new ConcurrentHashMap<>());
@@ -95,7 +95,7 @@ public class BNCandler {
 				json = json.substring(json.indexOf("["));
 				json = json.substring(0, json.indexOf("]]")+2);
 
-				final List<List<Object>> restKlines = new Moshi.Builder().build().adapter(List.class).fromJson(json);
+				final List<List<Object>> restKlines = MOSHI.adapter(List.class).fromJson(json);
 
 				DateTime dtEnd, dtStart;
 				List<Object> rlRes;
@@ -129,7 +129,7 @@ public class BNCandler {
 				return true;
 			}
 			else {
-				System.err.println("ERROR");
+				System.err.println("BN_WS_OHLCs_FETCH_ERROR");
 				System.err.println(response.body().string());
 			}
 		}
@@ -215,9 +215,9 @@ public class BNCandler {
 
 		String wsConectUrl = BASE_WS_URL+"/stream?streams=";
 		for(String pair : OHLC_SERIES.keySet()	) {
-			wsConectUrl += pair.replaceAll("-", "").toLowerCase()+"@trade/";
-			wsConectUrl += pair.replaceAll("-", "").toLowerCase()+"@bookTicker/";
-			wsConectUrl += pair.replaceAll("-", "").toLowerCase()+"@depth20@100ms/";
+			wsConectUrl += pair.toLowerCase()+"@trade/";
+			wsConectUrl += pair.toLowerCase()+"@bookTicker/";
+			wsConectUrl += pair.toLowerCase()+"@depth20@100ms/";
 		}
 		wsConectUrl = wsConectUrl.substring(0, wsConectUrl.lastIndexOf("/"));
 
