@@ -4,8 +4,8 @@ import java.util.List;
 import java.util.concurrent.*;
 import java.util.*;
 import com.squareup.moshi.*;
-import bn.utils.*;
 import okhttp3.*;
+import bn.utils.*;
 
 public class BNRest {
 	public static enum ORDER_TYPE {
@@ -510,6 +510,81 @@ public class BNRest {
 					// System.out.println(json);
 
 					return (List<Trade>) new Moshi.Builder().build().adapter(Types.newParameterizedType(List.class, bn.rest.Trade.class)).fromJson(json);
+				}
+
+				response.close();
+			}
+		}
+		catch(Exception e) {
+			e.printStackTrace();
+		}
+
+		return null;
+	}
+	
+	public void getSystemStatus() {
+		// https://api.binance.com/wapi/v3/systemStatus.html
+
+		final Request request = new Request.Builder().url(BASE_REST_API_URL+"/wapi/v3/systemStatus.html").build();
+		try {
+			final Response response = HTTP_CLIENT.newCall(request).execute();
+			if(response != null) {
+				if(response.isSuccessful()) {
+					final String json = response.body().string();
+
+					if(json == null || json.isEmpty()) return;
+
+					;
+				}
+
+				response.close();
+			}
+		}
+		catch(Exception e) {
+			e.printStackTrace();
+		}
+	}
+
+	public List<Deposit> depositHistory() {
+		return depositHistory(null);
+	}
+
+	@SuppressWarnings("unchecked")
+	public List<Deposit> depositHistory(String coin) {
+		// GET /sapi/v1/capital/deposit/hisrec (HMAC SHA256)
+
+		final String params =	"timestamp="+System.currentTimeMillis()+
+								(coin != null && !coin.isEmpty() ? "&coin="+coin : "");
+
+		String sign = "";
+		try {
+			sign = Utils.encodeHMACSHA256(apiSecret, params);
+		}
+		catch(Exception e) {
+			e.printStackTrace();
+
+			return null;
+		}
+		if(sign == null || sign.isEmpty()) return null;
+
+		final Request request = new Request.Builder().url(BASE_REST_API_URL+"/sapi/v1/capital/deposit/hisrec?"+params+"&signature="+sign)
+													.header("X-MBX-APIKEY", this.apiKey)
+													.build();
+		try {
+			final Response response = HTTP_CLIENT.newCall(request).execute();
+			if(response != null) {
+				if(response.isSuccessful()) {
+					final String json = response.body().string();
+
+					if(json == null || json.isEmpty()) return null;
+
+					// System.out.println(json);
+
+					return (List<Deposit>) new Moshi.Builder().build().adapter(Types.newParameterizedType(List.class, Deposit.class)).fromJson(json);
+				}
+				else {
+					System.out.println(response.code()+":"+response.message());
+					System.out.println(response.body().string());
 				}
 
 				response.close();
