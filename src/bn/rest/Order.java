@@ -5,9 +5,9 @@ import com.squareup.moshi.Moshi;
 /*
 {
 	"symbol":				"BTCPAX",
-	"orderId":				959,
+	"orderId":				959...,
 	"orderListId":			-1,
-	"clientOrderId":		"web_ec",
+	"clientOrderId":		"web_...",
 	"price":				"0.00000000",
 	"origQty":				"0.00121000",
 	"executedQty":			"0.00121000",
@@ -18,8 +18,8 @@ import com.squareup.moshi.Moshi;
 	"side":					"SELL",
 	"stopPrice":			"0.00000000",
 	"icebergQty":			"0.00000000",
-	"time":					157,
-	"updateTime":			157,
+	"time":					157...,
+	"updateTime":			157...,
 	"isWorking":			true
 }
 */
